@@ -14,6 +14,9 @@ const fetchReviews = (action$, state$, { get }) =>
     mergeMap(() =>
       from(get('/static/movie-reviews.json')).pipe(
         map(response => {
+
+          console.log("Payload from get request ", response.data)
+
           let payload = response.data
           return {
             type: REVIEWS_FETCH_SUCCESS,

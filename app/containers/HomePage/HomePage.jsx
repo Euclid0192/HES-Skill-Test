@@ -21,8 +21,8 @@ export function HomePage(props) {
       </Helmet>
       <main>
         <img src={hesImg} />
-        <h1>I am no Jedi.</h1>
-        <p>&mdash; Ahsoka Tano</p>
+        <h1>I will be the Pirates King.</h1>
+        <p>&mdash; Luffy</p>
       </main>
     </div>
   )
