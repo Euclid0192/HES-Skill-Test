@@ -1,9 +1,13 @@
+@import '~font-awesome/css/font-awesome.css';
+
 .reviews-container {
   padding: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  overflow: hidden;
 }
 
 .reviews-list {
@@ -33,9 +37,9 @@
 }
 
 .review-item .img-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .review-item h3 {
@@ -59,6 +63,21 @@
 }
 
 .max-load-button {
-    display: flex;
-    width: 50%;
+  display: flex;
+  width: 50%;
+}
+
+.control {
+  display: flex;
+  flex-direction: row;
+}
+
+.search-input {
+  height: 100%;
+  border-radius: 5px 0px 0px 5px;
+  background-color: #c9c1c1;
+}
+
+.search-icon {
+  border-radius: 0px 5px 5px 0px;
 }

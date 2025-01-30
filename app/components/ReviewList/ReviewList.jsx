@@ -14,8 +14,8 @@ const ReviewList = props => {
   const { reviews, loading, error } = props
   //   console.log('All reviews ', reviews.slice(0, 20))
 
-  // if (loading) return <p>Loading reviews...</p>
-  // if (error) return <p>Error: {error}</p>
+  //   if (loading) return <p>Loading reviews...</p>
+  //   if (error) return <p>Error: {error}</p>
 
   /// Sort on publication date, most recent first
   const sortedReviews = reviews.sort(
@@ -33,6 +33,16 @@ const ReviewList = props => {
   }
 
   /// Search by title
+  const [searchQuery, setSearchQuery] = useState('')
+  const handleSearchQueryChange = e => {
+    setSearchQuery(e.target.value)
+  }
+
+  const reviewsToDisplay = sortedReviews
+    .slice(0, Math.min(countDisplayed, sortedReviews.length))
+    .filter(review =>
+      review.display_title.toLowerCase().includes(searchQuery.toLowerCase())
+    )
 
   /// Filter by MPAA Rating, Publication Date, Critic's Pick
 
@@ -41,14 +51,24 @@ const ReviewList = props => {
   return (
     <div className="reviews-container">
       <h1>Review List</h1>
-      <div className="control">
-        <button className="button">Increase</button>
+      <div className="control nav">
+        {/* Search bar */}
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={handleSearchQueryChange}
+          placeholder="Find review by title..."
+          className="search-input"
+        />
+        {/* Font Awesome Search Icon */}
+        <button className="search-icon">
+          <i className="fa fa-search" />
+        </button>
       </div>
       {/* no bullet point */}
-      <ul className="reviews-list">
-        {sortedReviews
-          .slice(0, Math.min(countDisplayed, sortedReviews.length))
-          .map(review => (
+      {reviewsToDisplay.length > 0 ? (
+        <ul className="reviews-list">
+          {reviewsToDisplay.map(review => (
             <li key={review.id} className="review-item">
               {/* Display the image */}
               {review.multimedia && review.multimedia.src && (
@@ -93,7 +113,10 @@ const ReviewList = props => {
               </p>
             </li>
           ))}
-      </ul>
+        </ul>
+      ) : (
+        <p>No review found</p>
+      )}
       {countDisplayed < 50 ? (
         <button onClick={handleLoadMore} className="button load-more-button">
           Load more reviews
