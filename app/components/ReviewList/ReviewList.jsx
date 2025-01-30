@@ -32,6 +32,17 @@ const ReviewList = props => {
     }
   }
 
+  /// Open a review
+  const [selectedReview, setSelectedReview] = useState(null)
+
+  const handleOpenReview = review => {
+    setSelectedReview(review)
+  }
+
+  const handleCloseReview = () => {
+    setSelectedReview(null)
+  }
+
   /// Search by title
   const [searchQuery, setSearchQuery] = useState('')
   const handleSearchQueryChange = e => {
@@ -69,7 +80,10 @@ const ReviewList = props => {
       {reviewsToDisplay.length > 0 ? (
         <ul className="reviews-list">
           {reviewsToDisplay.map(review => (
-            <li key={review.id} className="review-item">
+            <li
+              key={review.id}
+              className="review-item"
+              onClick={() => handleOpenReview(review)}>
               {/* Display the image */}
               {review.multimedia && review.multimedia.src && (
                 <div className="img-container">
@@ -117,6 +131,58 @@ const ReviewList = props => {
       ) : (
         <p>No review found</p>
       )}
+
+      {/* Selected review */}
+      {selectedReview && (
+        <div
+          className={
+            selectedReview
+              ? 'review-details-overlay visible'
+              : 'review-details-overlay'
+          }>
+          <div
+            className={
+              selectedReview ? 'review-details visible' : 'review-details'
+            }>
+            <button className="close-button" onClick={handleCloseReview}>
+              ✖
+            </button>
+            <h2>{selectedReview.display_title}</h2>
+            {selectedReview.multimedia && selectedReview.multimedia.src && (
+              <div className="img-container">
+                <img
+                  src={selectedReview.multimedia.src}
+                  alt={selectedReview.display_title}
+                  width={selectedReview.multimedia.width}
+                  height={selectedReview.multimedia.height}
+                />
+              </div>
+            )}
+            <h3>{selectedReview.headline}</h3>
+            <p>{selectedReview.summary_short}</p>
+            <p>
+              <strong>By:</strong> {selectedReview.byline}
+            </p>
+            <p>
+              <strong>MPAA Rating:</strong>{' '}
+              {selectedReview.mpaa_rating || 'N/A'}
+            </p>
+            {selectedReview.critics_pick ? (
+              <p className="critics-pick">Critic's Pick ⭐</p>
+            ) : null}
+            <p>
+              <a
+                href={selectedReview.link.url}
+                target="_blank"
+                rel="noopener noreferrer">
+                {selectedReview.link.suggested_link_text || 'Read Full Review'}
+              </a>
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Button to load more reviews */}
       {countDisplayed < 50 ? (
         <button onClick={handleLoadMore} className="button load-more-button">
           Load more reviews
