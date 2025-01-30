@@ -18,15 +18,19 @@ const ReviewList = props => {
   // if (error) return <p>Error: {error}</p>
 
   /// Sort on publication date, most recent first
-  const sortedReviews = reviews
-    .sort(
-      (r1, r2) => new Date(r2.publication_date) - new Date(r1.publication_date)
-    )
-    .slice(0, 20)
+  const sortedReviews = reviews.sort(
+    (r1, r2) => new Date(r2.publication_date) - new Date(r1.publication_date)
+  )
   /// State: number of reviews currently displayed (default 20, can raise to max 50)
   const [countDisplayed, setCountDisplayed] = useState(20)
 
-  /// Display list
+  /// Display list default 20 reviews, max 50 reviews.
+  /// Handle increase number of displayed reviews
+  const handleLoadMore = () => {
+    if (countDisplayed < 50) {
+      setCountDisplayed(prev => Math.min(prev + 10, 50))
+    }
+  }
 
   /// Search by title
 
@@ -37,54 +41,68 @@ const ReviewList = props => {
   return (
     <div className="reviews-container">
       <h1>Review List</h1>
+      <div className="control">
+        <button className="button">Increase</button>
+      </div>
       {/* no bullet point */}
       <ul className="reviews-list">
-        {sortedReviews.map(review => (
-          <li key={review.id} className="review-item">
-            {/* Display the image */}
-            {review.multimedia && review.multimedia.src && (
-              <div className='img-container'>
-                <img
-                  src={review.multimedia.src}
-                  alt={review.display_title}
-                  width={review.multimedia.width}
-                  height={review.multimedia.height}
-                />
-              </div>
-            )}
+        {sortedReviews
+          .slice(0, Math.min(countDisplayed, sortedReviews.length))
+          .map(review => (
+            <li key={review.id} className="review-item">
+              {/* Display the image */}
+              {review.multimedia && review.multimedia.src && (
+                <div className="img-container">
+                  <img
+                    src={review.multimedia.src}
+                    alt={review.display_title}
+                    width={review.multimedia.width}
+                    height={review.multimedia.height}
+                  />
+                </div>
+              )}
 
-            {/* Display the title */}
-            <h3>{review.headline}</h3>
+              {/* Display the title */}
+              <h3>{review.headline}</h3>
 
-            {/* Display publication date */}
-            <p className="publication-date">
-              <strong>Published on:</strong>{' '}
-              {new Date(review.publication_date).toLocaleDateString()}
-            </p>
+              {/* Display publication date */}
+              <p className="publication-date">
+                <strong>Published on:</strong>{' '}
+                {new Date(review.publication_date).toLocaleDateString()}
+              </p>
 
-            {/* Display MPAA Rating */}
-            <p>
-              <strong>MPAA Rating:</strong> {review.mpaa_rating || 'N/A'}
-            </p>
+              {/* Display MPAA Rating */}
+              <p>
+                <strong>MPAA Rating:</strong> {review.mpaa_rating || 'N/A'}
+              </p>
 
-            {/* Display Critics Pick */}
-            <p>
-              <strong>Critics Pick:</strong>{' '}
-              {review.critics_pick === 1 ? 'Yes' : 'No'}
-            </p>
+              {/* Display Critics Pick */}
+              <p>
+                <strong>Critics Pick:</strong>{' '}
+                {review.critics_pick === 1 ? 'Yes' : 'No'}
+              </p>
 
-            {/* Link to the full review */}
-            <p>
-              <a
-                href={review.link.url}
-                target="_blank"
-                rel="noopener noreferrer">
-                {review.link.suggested_link_text || 'Read Full Review'}
-              </a>
-            </p>
-          </li>
-        ))}
+              {/* Link to the full review */}
+              <p>
+                <a
+                  href={review.link.url}
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  {review.link.suggested_link_text || 'Read Full Review'}
+                </a>
+              </p>
+            </li>
+          ))}
       </ul>
+      {countDisplayed < 50 ? (
+        <button onClick={handleLoadMore} className="button load-more-button">
+          Load more reviews
+        </button>
+      ) : (
+        <p className="button max-load-button">
+          Maximum number of reviews displayed. Cannot load more!
+        </p>
+      )}
     </div>
   )
 }
