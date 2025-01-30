@@ -12,15 +12,17 @@ const ReviewList = props => {
 
   /// Destructure state of reviews
   const { reviews, loading, error } = props
-//   console.log('All reviews ', reviews.slice(0, 20))
+  //   console.log('All reviews ', reviews.slice(0, 20))
 
   // if (loading) return <p>Loading reviews...</p>
   // if (error) return <p>Error: {error}</p>
 
   /// Sort on publication date, most recent first
-  const sortedReviews = reviews.sort(
-    (r1, r2) => new Date(r2.publication_date) - new Date(r1.publication_date)
-  ).slice(0, 20)
+  const sortedReviews = reviews
+    .sort(
+      (r1, r2) => new Date(r2.publication_date) - new Date(r1.publication_date)
+    )
+    .slice(0, 20)
   /// State: number of reviews currently displayed (default 20, can raise to max 50)
   const [countDisplayed, setCountDisplayed] = useState(20)
 
@@ -33,27 +35,29 @@ const ReviewList = props => {
   /// Persisting search and filter
 
   return (
-    <div className='reviews-container'>
+    <div className="reviews-container">
       <h1>Review List</h1>
       {/* no bullet point */}
-      <ul className='reviews-list'> 
+      <ul className="reviews-list">
         {sortedReviews.map(review => (
-          <li key={review.id}>
+          <li key={review.id} className="review-item">
             {/* Display the image */}
             {review.multimedia && review.multimedia.src && (
-              <img
-                src={review.multimedia.src}
-                alt={review.display_title}
-                width={review.multimedia.width}
-                height={review.multimedia.height}
-              />
+              <div className='img-container'>
+                <img
+                  src={review.multimedia.src}
+                  alt={review.display_title}
+                  width={review.multimedia.width}
+                  height={review.multimedia.height}
+                />
+              </div>
             )}
 
             {/* Display the title */}
             <h3>{review.headline}</h3>
 
             {/* Display publication date */}
-            <p>
+            <p className="publication-date">
               <strong>Published on:</strong>{' '}
               {new Date(review.publication_date).toLocaleDateString()}
             </p>
