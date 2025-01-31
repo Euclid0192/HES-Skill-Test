@@ -21,16 +21,6 @@ const ReviewList = props => {
   const sortedReviews = reviews.sort(
     (r1, r2) => new Date(r2.publication_date) - new Date(r1.publication_date)
   )
-  /// State: number of reviews currently displayed (default 20, can raise to max 50)
-  const [countDisplayed, setCountDisplayed] = useState(20)
-
-  /// Display list default 20 reviews, max 50 reviews.
-  /// Handle increase number of displayed reviews
-  const handleLoadMore = () => {
-    if (countDisplayed < 50) {
-      setCountDisplayed(prev => Math.min(prev + 10, 50))
-    }
-  }
 
   /// Open a review
   const [selectedReview, setSelectedReview] = useState(null)
@@ -48,21 +38,45 @@ const ReviewList = props => {
   const handleSearchQueryChange = e => {
     setSearchQuery(e.target.value)
   }
+  /// Filter by MPAA Rating, Publication Date, Critic's Pick
+  const [mpaaFilter, setMpaaFilter] = useState('')
+  const [dateFilter, setDateFilter] = useState('')
+  const [criticsPickFilter, setCriticsPickFilter] = useState(false)
 
+  /// Get review list after any search or filter
   const reviewsToDisplay = sortedReviews
-    .slice(0, Math.min(countDisplayed, sortedReviews.length))
     .filter(review =>
       review.display_title.toLowerCase().includes(searchQuery.toLowerCase())
     )
+    .filter(review => (mpaaFilter ? review.mpaa_rating === mpaaFilter : true))
+    .filter(review =>
+      dateFilter ? review.publication_date.startsWith(dateFilter) : true
+    )
+    .filter(review => (criticsPickFilter ? review.critics_pick === 1 : true))
+    .slice(0, countDisplayed)
 
-  /// Filter by MPAA Rating, Publication Date, Critic's Pick
+  /// State: number of reviews currently displayed (default 20, can raise to max 50)
+  const [countDisplayed, setCountDisplayed] = useState(20)
 
-  /// Persisting search and filter
+  /// Display list default 20 reviews, max 50 reviews.
+  /// Handle increase number of displayed reviews
+  const handleLoadMore = () => {
+    console.log(
+      'Current length of reviews ',
+      reviewsToDisplay.length,
+      ' ',
+      countDisplayed
+    )
+    if (countDisplayed < 50 && countDisplayed < reviewsToDisplay.length) {
+      setCountDisplayed(prev => Math.min(prev + 10, 50))
+    }
+  }
+  /// Persisting search and filter (done)
 
   return (
     <div className="reviews-container">
       <h1>Review List</h1>
-      <div className="control nav">
+      <div className="search-filter-control nav">
         {/* Search bar */}
         <input
           type="text"
@@ -71,10 +85,39 @@ const ReviewList = props => {
           placeholder="Find review by title..."
           className="search-input"
         />
-        {/* Font Awesome Search Icon */}
-        <button className="search-icon">
-          <i className="fa fa-search" />
-        </button>
+
+        <select
+          value={mpaaFilter}
+          onChange={e => {
+            setMpaaFilter(e.target.value)
+            setCountDisplayed(20)
+          }}>
+          <option value="">All MPAA Ratings</option>
+          <option value="PG">PG</option>
+          <option value="PG-13">PG-13</option>
+          <option value="R">R</option>
+          <option value="Not Rated">Not rated</option>
+        </select>
+
+        <input
+          type="month"
+          onChange={e => {
+            setDateFilter(e.target.value)
+            setCountDisplayed(20)
+          }}
+        />
+
+        <label>
+          <input
+            type="checkbox"
+            checked={criticsPickFilter}
+            onChange={() => {
+              setCriticsPickFilter(!criticsPickFilter)
+              setCountDisplayed(20)
+            }}
+          />
+          Critics Pick Only
+        </label>
       </div>
       {/* no bullet point */}
       {reviewsToDisplay.length > 0 ? (
