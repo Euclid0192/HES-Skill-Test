@@ -1,0 +1,60 @@
+.critic-container {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.critic-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.critic-item {
+  background-color: white; /* White background for the card */
+  border: 1px solid #ddd; /* Subtle border around the card */
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px; /* Rounded corners for a smooth look */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Soft shadow around the card */
+  max-width: 400px; /* Optional: Limit card width */
+  width: 100%;
+  transition: box-shadow 0.3s ease; /* Smooth shadow transition on hover */
+}
+
+.critic-item:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+}
+
+.critic-item img {
+  max-width: 100%; /* Ensure the image fits the card */
+  border-radius: 5px; /* Rounded corners for the image */
+}
+
+.critic-item .img-container,
+.img-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.critic-item h3 {
+  font-size: 1.4rem;
+  color: #333; /* Dark text for the headline */
+}
+
+.critic-item p {
+  color: #555; /* Lighter text for body */
+}
+
+.critic-item .publication-date {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.critic-item .mpaa-rating,
+.critic-item .critics-pick {
+  font-weight: bold;
+}

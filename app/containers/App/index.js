@@ -14,6 +14,7 @@ import HomePage from 'containers/HomePage/HomePage'
 
 import '../../styles/styles.scss'
 import ReviewList from '../../components/ReviewList/ReviewList'
+import CriticsPage from '../../components/CriticsPage/CriticsPage'
 
 
 export default function App(props) { 
@@ -24,9 +25,9 @@ export default function App(props) {
         </Helmet>
 
         <Switch>
-          {/* <Route path="/" component={HomePage} exact /> */}
-          <Route path="/" component={ReviewList} />
-          <Route path="/home" component={HomePage} />
+          <Route path="/" component={HomePage} exact />
+          <Route path="/reviews" component={ReviewList} />
+          <Route path="/critics" component={CriticsPage} />
         </Switch>
       </div>
     )
