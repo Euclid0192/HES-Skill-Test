@@ -13,7 +13,7 @@ import { Switch, Route } from 'react-router-dom'
 import HomePage from 'containers/HomePage/HomePage'
 
 import '../../styles/styles.scss'
-import ReviewList from '../../components/ReviewList/ReviewList'
+import ReviewList from '../../components/ReviewsPage/ReviewList'
 import CriticsPage from '../../components/CriticsPage/CriticsPage'
 
 
