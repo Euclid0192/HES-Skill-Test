@@ -173,3 +173,32 @@
     text-align: center;
   }
 }
+
+/// Next/Prev page buttons
+
+.prev-button, .next-button {
+  position: fixed;
+  top: 50%;
+  transition: all 0.2s ease-out;
+}
+
+.prev-button:disabled, .next-button:disabled {
+  background: grey;
+}
+
+// We don'w want to apply hover effect when buttons are disabled
+.prev-button[disabled]:hover, .next-button[disabled]:hover {
+  background: grey;
+}
+
+.prev-button:hover, .next-button:hover {
+  background: var(--grey-600);
+}
+
+.prev-button {
+  left: 10px;
+}
+.next-button {
+  right: 10px;
+}
+

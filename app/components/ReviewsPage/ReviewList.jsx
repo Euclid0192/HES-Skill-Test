@@ -31,6 +31,10 @@ const ReviewList = props => {
     setSelectedReview(null)
   }
 
+  /// State: number of reviews currently displayed (default 20, can raise to max 50)
+  const [countDisplayed, setCountDisplayed] = useState(20)
+  const [currentPage, setCurrentPage] = useState(1)
+
   /// Search by title
   const [searchQuery, setSearchQuery] = useState('')
   const handleSearchQueryChange = e => {
@@ -51,10 +55,7 @@ const ReviewList = props => {
       dateFilter ? review.publication_date.startsWith(dateFilter) : true
     )
     .filter(review => (criticsPickFilter ? review.critics_pick === 1 : true))
-    .slice(0, countDisplayed)
-
-  /// State: number of reviews currently displayed (default 20, can raise to max 50)
-  const [countDisplayed, setCountDisplayed] = useState(20)
+  // .slice((currentPage - 1) * countDisplayed, currentPage * countDisplayed)
 
   /// Display list default 20 reviews, max 50 reviews.
   /// Handle increase number of displayed reviews
@@ -69,7 +70,32 @@ const ReviewList = props => {
       setCountDisplayed(prev => Math.min(prev + 10, 50))
     }
   }
-  /// Persisting search and filter (done)
+  /// Next and previous page
+  const handleNextPage = () => {
+    console.log(
+      'current state of page and reviews and count displayed ',
+      currentPage,
+      ' ',
+      countDisplayed,
+      ' ',
+      currentPage * countDisplayed,
+      ' ',
+      reviewsToDisplay.length
+    )
+    if (currentPage * countDisplayed < reviewsToDisplay.length) {
+      setCurrentPage(prev => prev + 1)
+      setCountDisplayed(20)
+    }
+  }
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prev => prev - 1)
+      setCountDisplayed(20)
+    }
+  }
+
+  console.log('Current page ', currentPage, ' ', countDisplayed)
 
   return (
     <div className="reviews-container">
@@ -120,14 +146,19 @@ const ReviewList = props => {
       {/* no bullet point */}
       {reviewsToDisplay.length > 0 ? (
         <ul className="reviews-list">
-          {reviewsToDisplay.map(review => (
-            <li
-              key={review.id}
-              className="review-item"
-              onClick={() => handleOpenReview(review)}>
-              <ReviewItem review={review} />
-            </li>
-          ))}
+          {reviewsToDisplay
+            .slice(
+              (currentPage - 1) * countDisplayed,
+              currentPage * countDisplayed
+            )
+            .map(review => (
+              <li
+                key={review.id}
+                className="review-item"
+                onClick={() => handleOpenReview(review)}>
+                <ReviewItem review={review} />
+              </li>
+            ))}
         </ul>
       ) : (
         <p>No review found</p>
@@ -151,6 +182,20 @@ const ReviewList = props => {
           Maximum number of reviews displayed. Cannot load more!
         </p>
       )}
+
+      <button
+        onClick={handlePrevPage}
+        disabled={currentPage === 1}
+        className="button prev-button">
+        {'<'}
+      </button>
+
+      <button
+        onClick={handleNextPage}
+        disabled={currentPage * countDisplayed >= reviewsToDisplay.length}
+        className="button next-button">
+        {'>'}
+      </button>
     </div>
   )
 }
