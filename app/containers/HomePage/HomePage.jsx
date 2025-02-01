@@ -3,40 +3,37 @@ import { Helmet } from 'react-helmet' // Header Generator
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route, useHistory } from 'react-router-dom'
-
-import hesImg from 'images/hes.png'
-import { getMovieReviews } from 'resources/reviews/reviews.actions'
+import './HomePage.scss'
 
 export function HomePage(props) {
   const history = useHistory()
 
-  useEffect(() => {
-    props.getMovieReviews()
-  },[])
+  const handleToReviews = () => {
+    history.push('/reviews')
+  }
+
+  const handleToCritics = () => {
+    history.push('/critics')
+  }
 
   return (
-    <div>
+    <div className="home-container">
       <Helmet>
         <meta name="description" content="Home" />
       </Helmet>
       <main>
-        <img src={hesImg} />
-        <h1>I will be the Pirates King.</h1>
-        <p>&mdash; Luffy</p>
+        <h1>Welcome to some movie reviews!</h1>
       </main>
+      <div className="nav-buttons">
+        <button className="button" onClick={handleToReviews}>
+          To Reviews
+        </button>
+        <button className="button" onClick={handleToCritics}>
+          To Critics
+        </button>
+      </div>
     </div>
   )
 }
 
-const mapStateToProps = (state, ownProps) => {}
-
-const mapDispatchToProps = dispatch => ({
-  getMovieReviews: () => dispatch(getMovieReviews()),
-})
-
-export default compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )
-)(HomePage)
+export default HomePage
